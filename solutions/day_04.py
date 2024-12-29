@@ -123,35 +123,9 @@ if check_diagonal_1:
             index_list.append((x_idx,y_idx-x_idx))
             
         print(y_idx, index_list)
-    #         # text_line = ''.join()
         
-    #     text_line = ''.join([line[x_idx] for line in input_data])
-        
-    #     if text_line.find('XMAS') == -1:
-    #         if print_no_finds:
-    #             print(f'no vertical (up-to-down) XMAS on line: {x_idx}')
-    #         continue
-    #     else:
-    #         for y_idx in range(len(input_data)-3):
-    #             if text_line[y_idx:y_idx+4] == 'XMAS':
-    #                 for j in range(y_idx,y_idx+4):
-    #                     boolean_board[j][x_idx] = True
-    
-    # # Horizontal (down --> up)
-    # for x_idx in range(len(input_data[0])):
-        
-    #     text_line = ''.join([line[x_idx] for line in input_data])[::-1]
-        
-    #     if text_line.find('XMAS') == -1:
-    #         if print_no_finds:
-    #             print(f'no horizontal (down-to-up) XMAS on line: {y_idx}')
-    #         continue
-    #     else:
-    #         for y_idx in range(len(input_data)-3):
-    #             if text_line[y_idx:y_idx+4] == 'XMAS':
-    #                 for j in range(y_idx,y_idx+4):
-    #                     boolean_board[len(input_data)-1-j][x_idx] = True
-
+        text_line = ''.join([input_data[tuple[1]][tuple[0]] for tuple in index_list])
+        print(text_line)
                         
                                       
 print()
