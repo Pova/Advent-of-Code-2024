@@ -46,8 +46,8 @@ def apply_rules(numbers):
             if debug_mode:
                 print('big number : split')
             char_num = int(math.log10(number))+1
-            left_num = number//10**(char_num/2)
-            right_num = number - left_num*(10**(char_num/2))
+            left_num = int(number//10**(char_num/2))
+            right_num = int(number - left_num*(10**(char_num/2)))
             if debug_mode:
                 print(left_num, right_num)
             memory[number] = [left_num, right_num]
@@ -55,7 +55,7 @@ def apply_rules(numbers):
         else:
             if debug_mode:
                 print('leftover')
-            memory[number] = [number*2024]
+            memory[number] = [int(number*2024)]
             output_numbers += [number*2024]
             
     return output_numbers
@@ -65,7 +65,7 @@ def apply_rules(numbers):
 start = time.time()
 
 for i in range(25):
-    print(i)
+    print(f"blinked {i+1} time(s)")
     numbers = apply_rules(numbers)
     
     # with open(f'day_11_lists/day_11_list_after_{i+1}.pkl', 'wb') as file:
@@ -74,13 +74,15 @@ for i in range(25):
     # print(numbers)
     # print('-'*20)
     
-print(len(numbers))
+print("\n"+"-"*25)
+print(f"Part 1 answer: {len(numbers)}")
+print("-"*25)
 
 end = time.time()
 
 diff = end - start
 
-print(f"Time taken: {diff:.2f} seconds")
+print(f"\nTime taken: {diff:.2f} seconds\n")
 
 # part 2
 
@@ -107,8 +109,8 @@ def apply_rules_individual(number):
         if debug_mode:
             print('big number : split')
         char_num = int(math.log10(number))+1
-        left_num = number//10**(char_num/2)
-        right_num = number - left_num*(10**(char_num/2))
+        left_num = int(number//10**(char_num/2))
+        right_num = int(number - left_num*(10**(char_num/2)))
         if debug_mode:
             print(left_num, right_num)
         memory[number] = [left_num, right_num]
@@ -116,23 +118,47 @@ def apply_rules_individual(number):
     else:
         if debug_mode:
             print('leftover')
-        memory[number] = [number*2024]
+        memory[number] = [int(number*2024)]
         output_numbers += [number*2024]
         
     return output_numbers
 
-print(apply_rules_individual(0))
+print(f"before starting part 2, memory size = {len(memory.keys())}")
 
-counts = {}
+starting_number = 0
 
-for num in range(10):
+mappings_to_check = [starting_number,]
+
+counter = 0
+
+while mappings_to_check and counter < 10:
     
-    print(f'On num = {num}')
+    new_number = mappings_to_check.pop(0)
     
-    counts[num] = [1]
-    numbers = [num]
+    if new_number in memory.keys():
+        print(f'already know where to send {new_number} (mapped to {memory[new_number]})')
+        mappings_to_check.extend(memory[new_number])
+
+    else:
+        print(f'encountered a new number: {new_number}, extending list of numbers to check')
+        mapping = apply_rules_individual(new_number)
+        memory[new_number] = mapping
+        mappings_to_check.extend(mapping)
     
-    for _ in tqdm(range(75), desc="Processing"):
+    print(f'updated list to check: {mappings_to_check}')
+    counter += 1
     
-        numbers = apply_rules(numbers)
-        counts[num].append(len(numbers))
+
+# counts = {}
+
+# for num in range(10):
+    
+#     print(f'On num = {num}')
+    
+#     counts[num] = [1]
+#     numbers = [num]
+    
+#     for _ in tqdm(range(75), desc="Processing"):
+    
+#         numbers = apply_rules(numbers)
+#         counts[num].append(len(numbers))

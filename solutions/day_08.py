@@ -1,10 +1,15 @@
 debug_mode = False
+testing_mode = False
 
-with open('test_inputs/day_08.txt') as file:
-    
-    lines = [line.strip('\n') for line in file.readlines()]
-    
-print(lines)
+if testing_mode:
+    with open('test_inputs/day_08.txt') as file:
+        lines = [line.strip('\n') for line in file.readlines()]
+else:
+    with open('real_inputs/day_08.txt') as file:
+        lines = [line.strip('\n') for line in file.readlines()]
+
+if debug_mode:    
+    print(lines)
 
 width = len(lines[0])
 height = len(lines)
@@ -22,8 +27,9 @@ for y, line in enumerate(lines):
             symbols[char].append((x,y))
         else:
             symbols[char] = [(x,y),]
-            
-print(symbols)
+
+if debug_mode:            
+    print(symbols)
     
 unique_pairs = {}
 
@@ -42,8 +48,9 @@ for antenna, positions in symbols.items():
                 continue
             
             unique_pairs[antenna].append((position_1, position_2))
-            
-print(unique_pairs)
+
+if debug_mode:            
+    print(unique_pairs)
 
 antinode_locations = []
 
@@ -68,8 +75,10 @@ for antenna_code, location_tuples in unique_pairs.items():
 
 antinode_locations = set(antinode_locations)
 
-print(antinode_locations)
-print(len(antinode_locations))
+if debug_mode:
+    print(antinode_locations)
+
+print(f"part 1 : {len(antinode_locations)}")
 
 # part 2
 
@@ -83,6 +92,10 @@ for antenna_code, location_tuples in unique_pairs.items():
         
         delta_x = location_tuple[0][0] - location_tuple[1][0]
         delta_y = location_tuple[0][1] - location_tuple[1][1]
+        
+        delta_x = location_tuple[0][0] - location_tuple[1][0]
+        delta_y = location_tuple[0][1] - location_tuple[1][1]
+        
         multiplier = 0
         tuple_location = location_tuple[0]
         
@@ -90,21 +103,24 @@ for antenna_code, location_tuples in unique_pairs.items():
             
             new_tuple = (location_tuple[0][0]+delta_x*multiplier,location_tuple[0][1]+delta_y*multiplier)
             
-            if new_tuple[0] >= width or new_tuple[0] < 0:
-                break
-            
-            if new_tuple[1] >= height or new_tuple[1] < 0:
+            if (
+                new_tuple[0] >= width or 
+                new_tuple[0] < 0 or
+                new_tuple[1] >= height or 
+                new_tuple[1] < 0
+            ):
                 break
             
             antinode_locations_2.append(new_tuple)
             multiplier += 1
         
+for antenna, positions in symbols.items():
+    for location in positions:
+        antinode_locations_2.append(location)
 
 antinode_locations_2 = set(antinode_locations_2)
 
-print(antinode_locations_2)
-print(len(antinode_locations_2))
+if debug_mode:
+    print(antinode_locations_2)
 
-for j in range(height):
-    for i in range(width):
-        pass
+print(f"part 2 : {len(antinode_locations_2)}")
